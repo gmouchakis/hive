@@ -240,7 +240,7 @@ public class IndexedNcFileInputFormat extends FileInputFormat<LongWritable, Text
     return (InputSplit[])splits.toArray(new FileSplit[splits.size()]);
   }
 
-  public boolean validateInput(FileSystem fs, HiveConf conf, ArrayList<FileStatus> files)
+  public boolean validateInput(FileSystem fs, HiveConf conf, List<FileStatus> files)
     throws IOException
   {
     if (files.size() <= 0) {
@@ -596,7 +596,7 @@ public class IndexedNcFileInputFormat extends FileInputFormat<LongWritable, Text
       this.ncfile = NetcdfFile.open(split.getPath().toString());
       this.filename = split.getPath().getName();
       this.seprator = "\t";
-      ArrayList notSkipIDs = ColumnProjectionUtils.getReadColumnIDs(job);
+      List<Integer> notSkipIDs = ColumnProjectionUtils.getReadColumnIDs(job);
       String jobID=Utilities.getHiveJobID(job);
       String hiveTableName=null;
       //hiveTableName=job.get("hive.table.name"); // some maps return null!!! strange!!!

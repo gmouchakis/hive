@@ -142,6 +142,7 @@ import org.apache.hadoop.hive.ql.metadata.Table;
 import org.apache.hadoop.hive.ql.parse.SemanticException;
 import org.apache.hadoop.hive.ql.plan.BaseWork;
 import org.apache.hadoop.hive.ql.plan.DynamicPartitionCtx;
+import org.apache.hadoop.hive.ql.plan.ExprNodeDesc;
 import org.apache.hadoop.hive.ql.plan.FileSinkDesc;
 import org.apache.hadoop.hive.ql.plan.MapWork;
 import org.apache.hadoop.hive.ql.plan.MapredWork;
@@ -278,12 +279,34 @@ public final class Utilities {
       clearWorkMapForConf(conf);
     }
   }
+  
+    private static Map<String, LinkedHashMap<String, ArrayList<ExprNodeDesc>>>pathToNodeDescMap;
+    public static void setPathToNodeDesc(String jobID,LinkedHashMap<String, ArrayList<ExprNodeDesc>> pathToNodeDesc){
+  	  if(pathToNodeDescMap==null){
+  		  pathToNodeDescMap = Collections
+  			      .synchronizedMap(new HashMap<String,LinkedHashMap<String, ArrayList<ExprNodeDesc>>>());
+  	  }
+  	  pathToNodeDescMap.put(jobID, pathToNodeDesc);
+    }
+    public static LinkedHashMap<String, ArrayList<ExprNodeDesc>> getPathToNodeDesc(String jobID) {
+       return pathToNodeDescMap.get(jobID);
+    }
 
   public static MapredWork getMapRedWork(Configuration conf) {
     MapredWork w = new MapredWork();
-    w.setMapWork(getMapWork(conf));
+    
+    String jobID = getHiveJobID(conf);
+    MapWork mw = getMapWork(conf);
+    w.setMapWork(mw);
     w.setReduceWork(getReduceWork(conf));
+    
+    setPathToNodeDesc(jobID,mw.getPathToNodeDesc());
+    
     return w;
+  }
+  
+  public static String getHiveJobID(Configuration conf) {
+	  return getPlanPath(conf).getName();
   }
 
   public static void cacheMapWork(Configuration conf, MapWork work, Path hiveScratchDir) {

@@ -52,7 +52,7 @@ import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
 
-public class NcFileInputFormat2 extends FileInputFormat<LongWritable, Text>
+public class NcFileInputFormat extends FileInputFormat<LongWritable, Text>
   implements InputFormatChecker
 {
   private static final double SPLIT_SLOP = 1.1;
@@ -240,7 +240,7 @@ public class NcFileInputFormat2 extends FileInputFormat<LongWritable, Text>
     return (InputSplit[])splits.toArray(new FileSplit[splits.size()]);
   }
 
-  public boolean validateInput(FileSystem fs, HiveConf conf, ArrayList<FileStatus> files)
+  public boolean validateInput(FileSystem fs, HiveConf conf, List<FileStatus> files)
     throws IOException
   {
     if (files.size() <= 0) {
@@ -549,7 +549,7 @@ public class NcFileInputFormat2 extends FileInputFormat<LongWritable, Text>
       this.ncfile = NetcdfFile.open(split.getPath().toString());
       this.filename = split.getPath().getName();
       this.seprator = "\t";
-      ArrayList notSkipIDs = ColumnProjectionUtils.getReadColumnIDs(job);
+      List<Integer> notSkipIDs = ColumnProjectionUtils.getReadColumnIDs(job);
       String jobID=Utilities.getHiveJobID(job);
       LinkedHashMap<String, ArrayList<ExprNodeDesc>> pathToNodeDesc = Utilities.getPathToNodeDesc(jobID);
       String pathString;

@@ -67,6 +67,11 @@
       <version>${hadoop.version}</version>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>scihive-netcdf</groupId>
+      <artifactId>scihive-netcdf</artifactId>
+      <version>4.3.16</version>
+    </dependency>
 
     <!-- test inter-project -->
     <dependency>

@@ -239,7 +239,7 @@ public class NcFileRangeInputFormat extends FileInputFormat<LongWritable, Text>
     return (InputSplit[])splits.toArray(new FileSplit[splits.size()]);
   }
 
-  public boolean validateInput(FileSystem fs, HiveConf conf, ArrayList<FileStatus> files)
+  public boolean validateInput(FileSystem fs, HiveConf conf, List<FileStatus> files)
     throws IOException
   {
     if (files.size() <= 0) {
@@ -488,7 +488,7 @@ public class NcFileRangeInputFormat extends FileInputFormat<LongWritable, Text>
       this.ncfile = NetcdfFile.open(split.getPath().toString());
       this.filename = split.getPath().getName();
       this.seprator = "\t";
-      ArrayList notSkipIDs = ColumnProjectionUtils.getReadColumnIDs(job);
+      List<Integer> notSkipIDs = ColumnProjectionUtils.getReadColumnIDs(job);
       String jobID=Utilities.getHiveJobID(job);
       LinkedHashMap<String, ArrayList<ExprNodeDesc>> pathToNodeDesc = Utilities.getPathToNodeDesc(jobID);
       String pathString;
@@ -711,4 +711,6 @@ public class NcFileRangeInputFormat extends FileInputFormat<LongWritable, Text>
       return 1.0F * this.count / (float)this.idx.getSize();
     }
   }
+
+
 }
